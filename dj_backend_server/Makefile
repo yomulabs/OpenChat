@@ -9,7 +9,7 @@ ifndef DOCKER
 $(error $(shell tput setaf 1)"Docker is not installed. Please install Docker before proceeding."$(shell tput sgr0))
 endif
 
-ifndef DOCKER_COMPOSE 
+ifndef DOCKER_COMPOSE
 $(error $(shell tput setaf 1)"Docker Compose is not installed. Please install Docker Compose before proceeding."$(shell tput sgr0))
 endif
 
@@ -28,14 +28,14 @@ ifndef venv
 	endif
 endif
 
-activate-venv: 
-	@echo $(shell tput setaf 3)"Activating virtual environment..."$(shell tput sgr0)
+activate-venv:
+	@echo "Activating virtual environment..."
 	. venv/bin/activate
 
 
 install-requirements: activate-venv
-	@echo $(shell tput setaf 2)"Installing Python dependencies..."$(shell tput sgr0)
-	pip install -r requirements.txt
+	@echo "Installing Python dependencies..."
+	pip install --default-timeout=500 -r requirements.txt
 
 install: .env install-requirements
 	docker-compose up -d
@@ -45,7 +45,7 @@ down:
 
 ifeq ($(OS), Darwin)  # macOS
 OPEN_COMMAND := open
-else ifeq ($(OS), Linux)  
+else ifeq ($(OS), Linux)
 OPEN_COMMAND := xdg-open
 else
 OPEN_COMMAND := echo $(shell tput setaf 1)"Unsupported OS: $(OS)"$(shell tput sgr0)
