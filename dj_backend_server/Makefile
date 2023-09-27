@@ -13,6 +13,14 @@ ifndef DOCKER_COMPOSE
 $(error $(shell tput setaf 1)"Docker Compose is not installed. Please install Docker Compose before proceeding."$(shell tput sgr0))
 endif
 
+# Determine the architecture
+ARCH := $(shell uname -m)
+ifeq ($(ARCH),x86_64)
+  COMPOSE_FILE := docker-compose.linux.yaml
+else
+  COMPOSE_FILE := docker-compose.yaml
+endif
+
 .env.docker:
 	@echo $(shell tput setaf 1)"Error: The .env.docker file is missing. Please create it before proceeding. Refer example.env.docker or readme file in dj_backend_server/readme.md"$(shell tput sgr0)
 	exit 1
@@ -38,10 +46,10 @@ install-requirements: activate-venv
 	pip install --default-timeout=500 -r requirements.txt
 
 install: .env install-requirements
-	docker-compose up -d
+	docker-compose -f $(COMPOSE_FILE) up -d
 
 down:
-	docker-compose down
+	docker-compose -f $(COMPOSE_FILE) down
 
 ifeq ($(OS), Darwin)  # macOS
 OPEN_COMMAND := open
@@ -51,13 +59,6 @@ else
 OPEN_COMMAND := echo $(shell tput setaf 1)"Unsupported OS: $(OS)"$(shell tput sgr0)
 endif
 
-# Determine the architecture
-ARCH := $(shell uname -m)
-ifeq ($(ARCH),x86_64)
-  COMPOSE_FILE := docker-compose.yaml
-else
-  COMPOSE_FILE := docker-compose.linux.yaml
-endif
 
 dev-start:
 	docker-compose -f $(COMPOSE_FILE) up -d
