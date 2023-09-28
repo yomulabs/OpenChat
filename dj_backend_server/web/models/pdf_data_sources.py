@@ -4,12 +4,14 @@ import uuid
 
 class PdfDataSource(models.Model):
     id = models.CharField(max_length=36, primary_key=True)
-    chatbot_id = models.CharField(max_length=36, null=True)
+    #chatbot_id = models.CharField(max_length=36, null=True)
     files = models.JSONField()
     folder_name = models.CharField(max_length=255, null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     ingest_status = models.CharField(max_length=255, default='success')
+    chatbot = models.ForeignKey('Chatbot', on_delete=models.CASCADE, related_name='pdf_data_sources')
+
 
     def set_id(self, _id):
         self.id = _id
@@ -21,7 +23,7 @@ class PdfDataSource(models.Model):
         self.chatbot_id = chatbot_id
 
     def get_chatbot_id(self):
-        return self.chatbot_id
+        return self.chatbot.id
 
     def set_files(self, files):
         self.files = files
