@@ -90,7 +90,7 @@
                                     <a href="{% url 'chat' token=bot.token %}" target="_blank"
                                         style="cursor: pointer!important;">
                                         <input style="cursor: pointer!important;" id="tooltip" class="form-input w-full" type="text"
-                                        value="http://localhost:8000{% url 'chat' token=bot.token %}" disabled>
+                                        value="{{ base_url }}{% url 'chat' token=bot.token %}" disabled>
                              
                                     </a>
                                 </div>
