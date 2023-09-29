@@ -19,6 +19,17 @@ Welcome to the exciting world of our Django project! This repository combines th
 
 Our project combines Django, a powerful web framework, and Celery, a distributed task queue system. This combination allows for seamless handling of background tasks, ensuring a responsive user experience and efficient resource utilization.
 
+## Dev mode
+
+   ```
+   git clone https://github.com/openchatai/OpenChat.git
+   cd dj_backend_server
+
+   docker run -p 6333:6333 qdrant/qdrant
+   celery -A dj_backend_server worker --loglevel=info
+   python manage.py runserver
+   ```
+
 ## Prerequisites
 
 Before you begin, make sure you have the following installed:
@@ -129,7 +140,7 @@ These environment variables configure your application's settings, interactions 
 
 ## Dockerizing Project Execution
 
-To streamline the project execution process, Docker proves useful. Instead of using the typical `.env` file, you will utilize an `.env.docker` file. This `.env.docker` file should encapsulate the same set of credentials and steps as elucidated in the preceding section. 
+To streamline the project execution process, Docker proves useful. Instead of using the typical `.env` file, you will utilize an `.env.docker` file. This `.env.docker` file should encapsulate the same set of credentials and steps as elucidated in the preceding section.
 
 However, do note that a few configurations will undergo modification. Specifically, instances of 'localhost' should be replaced with the respective names of the containers. Here's how the modified configurations should appear:
 
