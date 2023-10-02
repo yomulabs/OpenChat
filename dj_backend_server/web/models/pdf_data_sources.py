@@ -10,7 +10,7 @@ class PdfDataSource(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     ingest_status = models.CharField(max_length=255, default='success')
-    chatbot = models.ForeignKey('Chatbot', on_delete=models.CASCADE, related_name='pdf_data_sources')
+    chatbot = models.ForeignKey('Chatbot', on_delete=models.CASCADE, related_name='pdf_data_sources', null=True)
 
 
     def set_id(self, _id):

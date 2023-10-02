@@ -13,7 +13,7 @@ class CrawledPages(models.Model):
     aws_url = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # content_file= models.CharField(max_length=100)
+    content_file = models.TextField()
 
     def get_id(self):
         return self.id
