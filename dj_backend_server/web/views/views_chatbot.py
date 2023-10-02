@@ -156,6 +156,8 @@ def get_chat_view(request, token):
     bot = get_object_or_404(Chatbot, token=token)
 
     # Initiate a cookie if it doesn't exist
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+
     cookie_name = 'chatbot_' + str(bot.id)
     if cookie_name not in request.COOKIES:
         cookie_value = str(uuid4())[:20]
