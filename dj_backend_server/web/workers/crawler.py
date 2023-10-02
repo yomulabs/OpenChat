@@ -61,6 +61,7 @@ def store_crawled_page_content_to_database(url, response, chatbot_id, data_sourc
     # Create a CrawledPages object and save it to the database
     try:
         CrawledPages.objects.create(
+            id=uuid4(),
             url=url,
             status_code=response.status_code,
             chatbot_id=chatbot_id,

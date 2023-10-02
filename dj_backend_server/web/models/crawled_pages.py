@@ -4,7 +4,7 @@ from .website_data_sources import WebsiteDataSource
 from web.models.chatbot import Chatbot
 
 class CrawledPages(models.Model):
-    id = models.CharField(max_length=36, primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     chatbot_id = models.CharField(max_length=36, null=True)
     website_data_source = models.ForeignKey(WebsiteDataSource, on_delete=models.CASCADE, related_name='crawled_pages')
     url = models.CharField(max_length=255)
@@ -13,7 +13,7 @@ class CrawledPages(models.Model):
     aws_url = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    content_file = models.TextField()
+    content_file = models.TextField(default='')
 
     def get_id(self):
         return self.id
@@ -32,9 +32,6 @@ class CrawledPages(models.Model):
 
     def get_status_code(self):
         return self.status_code
-
-    def set_id(self, _id):
-        self.id = _id
 
     def set_chatbot_id(self, chatbot_id):
         self.chatbot_id = chatbot_id
