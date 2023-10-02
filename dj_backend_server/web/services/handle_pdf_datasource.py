@@ -14,6 +14,7 @@ class HandlePdfDataSource:
 
     def handle(self) -> PdfDataSource:
         data_source = PdfDataSource()
+        data_source.id = uuid4()
         data_source.bot = self.bot
 
         folder_name = secrets.token_hex(20)
