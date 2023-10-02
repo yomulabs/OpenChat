@@ -9,7 +9,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
 from uuid import uuid4
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse, urljoin
 from web.enums.website_data_source_status_enum import WebsiteDataSourceStatusType
 from web.listeners.ingest_website_data_source import handle_crawling_completed
 
@@ -135,6 +135,9 @@ def extract_links(html, root_url):
     soup = BeautifulSoup(html, 'html.parser')
     anchor_tags = soup.find_all('a')
 
+    parsed_root_url = urlparse(root_url)
+    base_root_url = parsed_root_url.scheme + "://" + parsed_root_url.netloc
+
     # Extract the URLs from the anchor tags
     extracted_urls = []
     for tag in anchor_tags:
@@ -145,6 +148,9 @@ def extract_links(html, root_url):
     # Normalize the URLs (e.g., remove query parameters, fragments)
     normalized_urls = []
     for url in extracted_urls:
+        if url.startswith("/"):
+            url = urljoin(base_root_url, url)  # Prepend root URL to relative URL
+
         parsed_url = urlparse(url)
         normalized_url = urlunparse((parsed_url.scheme, parsed_url.netloc, parsed_url.path, '', '', ''))
         normalized_urls.append(normalized_url)
@@ -154,7 +160,7 @@ def extract_links(html, root_url):
     filtered_urls = [url for url in normalized_urls if url.startswith(root_url_parts.scheme + '://' + root_url_parts.netloc)]
 
     # Return the list of extracted and filtered URLs
-    return filtered_urls
+    return list(set(filtered_urls))
 
 
 def crawl(data_source_id, url, crawled_urls, max_pages, chatbot_id):
@@ -182,9 +188,11 @@ def crawl(data_source_id, url, crawled_urls, max_pages, chatbot_id):
 
         # Extract all the links from the HTML content
         links = extract_links(html, url)
+        print("list length: " + str(len(links)))
 
         # Recursively crawl each extracted link
         for link in links:
+            print("crawl link: " + link)
             crawl(data_source_id, link, crawled_urls, max_pages, chatbot_id)
 
             # Update crawling progress
